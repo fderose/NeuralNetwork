@@ -13,7 +13,7 @@ class NeuralNetwork {
     private String name;
 
     @JsonProperty("hiddenLayers")
-    private List<Layer> hiddenLayers;
+    private List<HiddenLayer> hiddenLayers;
 
     @JsonProperty("outputLayer")
     private OutputLayer outputLayer;
@@ -32,11 +32,11 @@ class NeuralNetwork {
         this.name = name;
     }
 
-    public List<Layer> getHiddenLayers() {
+    public List<HiddenLayer> getHiddenLayers() {
         return hiddenLayers;
     }
 
-    public void setHiddenLayers(List<Layer> hiddenLayers) {
+    public void setHiddenLayers(List<HiddenLayer> hiddenLayers) {
         this.hiddenLayers = hiddenLayers;
     }
 
@@ -74,7 +74,7 @@ class NeuralNetwork {
                     .readerFor(TrainingInstance.class)
                     .readValues(jsonFile)) {
 
-                List<Layer> reversedHiddenLayers = new ArrayList<>(hiddenLayers);
+                List<HiddenLayer> reversedHiddenLayers = new ArrayList<>(hiddenLayers);
                 Collections.reverse(reversedHiddenLayers);
 
                 while (iterator.hasNext()) {
@@ -82,7 +82,7 @@ class NeuralNetwork {
                     System.out.println("Training on epoch " + epoch + " instance " + counter++);
 
                     double[] inputs = instance.getInputs();
-                    for (Layer hiddenLayer : hiddenLayers) {
+                    for (HiddenLayer hiddenLayer : hiddenLayers) {
                         inputs = hiddenLayer.computeOutputs(inputs);
                     }
                     outputLayer.computeOutputs(inputs);
@@ -90,13 +90,13 @@ class NeuralNetwork {
                     outputLayer.computeError(instance.getLabels(), null);
 
                     double[] bpData = outputLayer.collectBPData();
-                    for (Layer hiddenLayer : reversedHiddenLayers) {
+                    for (HiddenLayer hiddenLayer : reversedHiddenLayers) {
                         hiddenLayer.setDerivativesOfErrorFunctionWRTNetInputs(bpData);
                         bpData = hiddenLayer.collectBPData();
                     }
 
                     outputLayer.adjustWeights();
-                    for (Layer hiddenLayer : reversedHiddenLayers) {
+                    for (HiddenLayer hiddenLayer : reversedHiddenLayers) {
                         hiddenLayer.adjustWeights();
                     }
                 }
@@ -121,11 +121,11 @@ class NeuralNetwork {
                 TrainingInstance instance = iterator.next();
                 System.out.println("Running instance " + counter++);
 
-                List<Layer> reversedHiddenLayers = new ArrayList<>(hiddenLayers);
+                List<HiddenLayer> reversedHiddenLayers = new ArrayList<>(hiddenLayers);
                 Collections.reverse(reversedHiddenLayers);
 
                 double[] inputs = instance.getInputs();
-                for (Layer hiddenLayer : hiddenLayers) {
+                for (HiddenLayer hiddenLayer : hiddenLayers) {
                     inputs = hiddenLayer.computeOutputs(inputs);
                 }
                 outputLayer.computeOutputs(inputs);
