@@ -42,4 +42,3 @@ public class OutputLayer extends Layer {
             neuron.adjustWeights();
         }
     }
-}
