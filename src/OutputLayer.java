@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class OutputLayer extends Layer {
+public class OutputLayer extends HiddenLayer {
     final List<OutputLayerNeuron> neurons = new ArrayList<>();
 
     int i = 0;
@@ -42,3 +42,4 @@ public class OutputLayer extends Layer {
             neuron.adjustWeights();
         }
     }
+}
