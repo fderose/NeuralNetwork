@@ -130,6 +130,7 @@ class NeuralNetwork {
                 }
                 outputLayer.computeOutputs(inputs);
 
+                stats.setCurrentInstance(instance);
                 outputLayer.computeError(instance.getLabels(), stats);
 
             }
